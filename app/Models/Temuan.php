@@ -9,9 +9,11 @@ class Temuan extends Model
 {
     use HasFactory;
 
-    public $table = 'temuans';
+    protected $table = 'temuans';
 
-    public $fillable = [
+    protected $primaryKey = 'temuan_id';
+
+    protected $fillable = [
         'lokasi_feeder',
         'no_pole',
         'equipment_type',

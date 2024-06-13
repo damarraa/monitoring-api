@@ -9,9 +9,11 @@ class Pemeriksaan extends Model
 {
     use HasFactory;
 
-    public $table = 'pemeriksaans';
+    protected $table = 'pemeriksaans';
 
-    public $fillable = [
+    protected $primaryKey = 'pemeriksaan_id';
+
+    protected $fillable = [
         'lokasi_feeder',
         'no_pole',
         'kondisi_no_pole',
