@@ -42,42 +42,38 @@ class TemuanController extends Controller
                 'no_pole' => 'required',
                 'equipment_type' => 'required',
                 'finding' => 'required',
-                'gambars.*' => 'nullable|mimes:png,jpg,jpeg,webp'
+                'gambar' => 'required|array',
+                'gambars.*' => 'nullable|mimes:png,jpg,jpeg,webp|max:2048'
             ]);
 
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 400);
             }
             
-            $gambar = [];
-            if ($files = $request->file('gambars')) {
-                foreach ($files as $file) {
-                    $extension = $files->getClientOriginalExtension();
-                    $filename = time().'.'.$extension;
-                    $path = "uploads/foto_findings/";
-                    $gambar_url = $path.$filename;
-                    $file->move($path, $filename);
-                    $gambar[] = $gambar_url;
-                }
-            }
-    
-            $temuan = Temuan::create([
-                'lokasi_feeder' => $request->lokasi_feeder,
-                'no_pole' => $request->no_pole,
-                'equipment_type' => $request->equipment_type,
-                'finding' => $request->finding,
-                'gambar' => implode('|', $gambar)
-            ]);
-            
-            $response_data = [
-                'message' => 'Data Temuan Pemeriksaan berhasil dibuat!',
-                'data' => $temuan
-            ];
+            $temuan = new Temuan();
+            $temuan->lokasi_feeder = $request->input('lokasi_feeder');
+            $temuan->no_pole = $request->input('no_pole');
+            $temuan->equipment_type = $request->input('equipment_type');
+            $temuan->finding = $request->input('finding');
 
-            return response()->json($response_data, 201);
-        } catch (\Throwable $th) {
-            Log::error('Error occurred: '. $th->getMessage());
-            return response()->json(['message' => 'Terjadi kesalahan dalam memproses permintaan.'], 500);
+            if ($request->hasFile('gambar')) {
+                $images = $request->file('gambar');
+                $imageNames = [];
+
+                foreach ($images as $image) {
+                    $imageName = time(). '.'. $image->getClientOriginalExtension();
+                    $image->move(public_path('uploads/temuans'), $imageName);
+                    $imageNames[] = $imageName;
+                }
+
+                $temuan->gambar = json_encode($imageNames);
+            }
+
+            $temuan->save();
+
+            return response()->json(['message' => 'Finding created successfully'], 201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 

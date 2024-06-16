@@ -63,7 +63,9 @@ return new class extends Migration
             $table->string('kondisi_kawat_duri');
             $table->string('aktifitas_konduktor');
             $table->string('tipe_konduktor');
+            $table->string('foto_finding')->nullable();
             $table->text('keterangan');
+            $table->enum('status', ['Open', 'Closed'])->default('Open');
             $table->timestamps();
         });
     }

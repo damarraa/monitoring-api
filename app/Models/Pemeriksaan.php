@@ -64,6 +64,7 @@ class Pemeriksaan extends Model
         'kondisi_kawat_duri',
         'aktifitas_konduktor',
         'tipe_konduktor',
-        'keterangan'
+        'keterangan',
+        'status'
     ];
 }

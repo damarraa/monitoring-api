@@ -37,7 +37,7 @@ class PemeriksaanController extends Controller
     public function store(Request $request)
     {
         try {
-            $validator = Validator::make($request->all(), [
+            $validatedData = $request->validate([
                 'lokasi_feeder' => 'required',
                 'no_pole' => 'required',
                 'kondisi_no_pole' => 'required',
@@ -58,12 +58,14 @@ class PemeriksaanController extends Controller
                 'kapasitas_tiang' => 'required',
                 'tipe_pin_insulator' => 'required',
                 'kondisi_pin_insulator' => 'required',
+                'jumlah_pin_insulator' => 'required',
                 'kondisi_dead_end_insulator' => 'required',
                 'jumlah_dead_end_insulator' => 'required',
                 'kondisi_suspension_insulator' => 'required',
                 'jumlah_suspension_insulator' => 'required',
                 'tipe_lightning_arrester' => 'required',
                 'kondisi_lightning_arrester' => 'required',
+                'jumlah_lightning_arrester' => 'required',
                 'kondisi_kawat_guy' => 'required',
                 'jumlah_kawat_guy' => 'required',
                 'kondisi_static_wire' => 'required',
@@ -86,17 +88,33 @@ class PemeriksaanController extends Controller
                 'kondisi_kawat_duri' => 'required',
                 'aktifitas_konduktor' => 'required',
                 'tipe_konduktor' => 'required',
-                'keterangan' => 'required'
+                'foto_finding' => 'nullable|mimes:png,jpg,jpeg,webp',
+                'keterangan' => 'required',
+                'status' => 'required'
             ]);
 
-            if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 400);
+            // Proses unggah gambar
+            if ($request->hasFile('foto_finding')) {
+                $image = $request->file('foto_finding');
+                $imageName = time().'.'.$image->getClientOriginalExtension();
+                $image->move(public_path('uploads/foto_findings/'), $imageName);
+                $validatedData['foto_finding'] = $imageName;
             }
 
-            
-        } catch (\Throwable $th) {
-            Log::error('Error occurred: '. $th->getMessage());
-            return response()->json(['message' => 'Terjadi kesalahan dalam memproses permintaan.'], 500);
+            // Simpan data ke database
+            $model = Pemeriksaan::create($validatedData);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data berhasil disimpan',
+                'data' => $model
+            ], 201);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+            ], 500);
         }
     }
 

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('equipment_type');
             $table->string('finding');
             $table->string('gambar')->nullable();
+            $table->enum('status', ['Open', 'Closed'])->default('Open');
             $table->timestamps();
         });
     }

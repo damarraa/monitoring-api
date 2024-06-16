@@ -18,6 +18,7 @@ class Temuan extends Model
         'no_pole',
         'equipment_type',
         'finding',
-        'gambar'
+        'gambar',
+        'status'
     ];
 }

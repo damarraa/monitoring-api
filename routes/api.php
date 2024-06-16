@@ -34,9 +34,9 @@ Route::get('dataPemeriksaan/{id}', [PemeriksaanController::class, 'show']);
 Route::patch('dataPemeriksaan/{id}', [PemeriksaanController::class, 'update']);
 Route::delete('dataPemeriksaan/{id}', [PemeriksaanController::class, 'destroy']);
 
-Route::get('dataPemeriksaan/{pemeriksaan_id}/upload', [PemeriksaanGambarController::class, 'index']);
-Route::post('dataPemeriksaan/{pemeriksaan_id}/upload', [PemeriksaanGambarController::class, 'store']);
-Route::get('data-gambar/{pgambar_id}/delete', [PemeriksaanGambarController::class, 'destroy']);
+// Route::get('dataPemeriksaan/{pemeriksaan_id}/upload', [PemeriksaanGambarController::class, 'index']);
+// Route::post('dataPemeriksaan/{pemeriksaan_id}/upload', [PemeriksaanGambarController::class, 'store']);
+// Route::get('data-gambar/{pgambar_id}/delete', [PemeriksaanGambarController::class, 'destroy']);
 
 Route::get('dataTemuan', [TemuanController::class, 'index']);
 Route::post('dataTemuan', [TemuanController::class, 'store']);
