@@ -21,4 +21,8 @@ class Temuan extends Model
         'gambar',
         'status'
     ];
+
+    public $casts = [
+        'gambar' => 'array'
+    ];
 }

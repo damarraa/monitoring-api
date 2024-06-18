@@ -43,7 +43,7 @@ class TemuanController extends Controller
                 'equipment_type' => 'required',
                 'finding' => 'required',
                 'gambar' => 'required|array',
-                'gambars.*' => 'nullable|mimes:png,jpg,jpeg,webp|max:2048'
+                'gambar.*' => 'nullable|mimes:png,jpg,jpeg,webp|max:2048'
             ]);
 
             if ($validator->fails()) {
@@ -71,9 +71,16 @@ class TemuanController extends Controller
 
             $temuan->save();
 
-            return response()->json(['message' => 'Finding created successfully'], 201);
+            return response()->json([
+                'success' => true,
+                'message' => 'Data berhasil disimpan',
+                'data' => $temuan
+            ], 201);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json([
+                'success' => false,
+                'error' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
         }
     }
 
